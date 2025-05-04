@@ -1,0 +1,15 @@
+@model EventEase.Models.Venue
+
+@{
+    ViewData["Title"] = "Venue Details";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div>
+    <h4>@Model.VenueName</h4>
+    <p>@Model.Location</p>
+    <p>@Model.Capacity</p>
+</div>
+
+<a href="@Url.Action("Index", "Venue")" class="btn btn-primary">Back to List</a>
