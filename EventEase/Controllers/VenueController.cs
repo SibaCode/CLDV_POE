@@ -40,5 +40,62 @@ namespace EventEase.Controllers
             var venues = _context.Venues.ToList();
             return View(venues);
         }
+
+        // GET: Venues/Edit/5
+[HttpGet("Edit/{id}")]
+public async Task<IActionResult> Edit(int id)
+{
+    var venue = await _context.Venues.FindAsync(id);
+    if (venue == null)
+    {
+        return NotFound();
+    }
+    return View(venue);
+}
+
+// POST: Venues/Edit/5
+[HttpPost("Edit/{id}")]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Edit(int id, Venue venue)
+{
+    if (id != venue.VenueId)
+        return NotFound();
+
+    if (ModelState.IsValid)
+    {
+        _context.Update(venue);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
+    }
+    return View(venue);
+}
+
+// GET: Venues/Delete/5
+[HttpGet("Delete/{id}")]
+public async Task<IActionResult> Delete(int id)
+{
+    var venue = await _context.Venues.FindAsync(id);
+    if (venue == null)
+    {
+        return NotFound();
+    }
+    return View(venue);
+}
+
+// POST: Venues/Delete/5
+[HttpPost, ActionName("Delete")]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> DeleteConfirmed(int id)
+{
+    var venue = await _context.Venues.FindAsync(id);
+    if (venue != null)
+    {
+        _context.Venues.Remove(venue);
+        await _context.SaveChangesAsync();
+    }
+    return RedirectToAction(nameof(Index));
+}
+
+
     }
 }
