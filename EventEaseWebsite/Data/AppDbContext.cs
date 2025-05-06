@@ -13,11 +13,25 @@ namespace EventEase.Data
            protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
        
-        modelBuilder.Entity<Event>()
-            .HasOne(e => e.Venue)
-            .WithMany(v => v.Events)
-            .HasForeignKey(e => e.VenueId)
-            .OnDelete(DeleteBehavior.Restrict);  // Avoids cascading delete
+       modelBuilder.Entity<Event>()
+                .HasOne(e => e.Venue)
+                .WithMany()  // No navigation property in Venue for Events
+                .HasForeignKey(e => e.VenueId)
+                .OnDelete(DeleteBehavior.Restrict);  // Disable cascade delete
+
+            // Configure the Event-Booking relationship (One-to-Many)
+            modelBuilder.Entity<Booking>()
+                .HasOne(b => b.Event)
+                .WithMany()  // No navigation property in Event for Bookings
+                .HasForeignKey(b => b.EventId)
+                .OnDelete(DeleteBehavior.Restrict);  // Disable cascade delete
+
+            // Configure the Venue-Booking relationship (One-to-Many)
+            modelBuilder.Entity<Booking>()
+                .HasOne(b => b.Venue)
+                .WithMany()  // No navigation property in Venue for Bookings
+                .HasForeignKey(b => b.VenueId)
+                .OnDelete(DeleteBehavior.Restrict); // Avoids cascading delete
     }
     }
 }

@@ -106,13 +106,13 @@ namespace EventEaseWebsite.Migrations
                     b.HasOne("EventEase.Models.Event", "Event")
                         .WithMany()
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("EventEase.Models.Venue", "Venue")
                         .WithMany()
                         .HasForeignKey("VenueId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Event");
@@ -123,17 +123,12 @@ namespace EventEaseWebsite.Migrations
             modelBuilder.Entity("EventEase.Models.Event", b =>
                 {
                     b.HasOne("EventEase.Models.Venue", "Venue")
-                        .WithMany("Events")
+                        .WithMany()
                         .HasForeignKey("VenueId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Venue");
-                });
-
-            modelBuilder.Entity("EventEase.Models.Venue", b =>
-                {
-                    b.Navigation("Events");
                 });
 #pragma warning restore 612, 618
         }
