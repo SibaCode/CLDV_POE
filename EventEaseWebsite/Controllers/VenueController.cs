@@ -46,7 +46,7 @@ namespace EventEase.Controllers
         }
 
         // GET: Venue/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+      public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -60,9 +60,7 @@ namespace EventEase.Controllers
             }
             return View(venue);
         }
-
-        // POST: Venue/Edit/5
-        [HttpPost]
+         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("VenueId,VenueName,Location,Capacity")] Venue venue)
         {
