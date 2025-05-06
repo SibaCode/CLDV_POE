@@ -1,0 +1,17 @@
+@model EventEase.Models.Booking
+
+@{
+    ViewData["Title"] = "Booking Details";
+}
+
+<h2>Booking Details</h2>
+
+<div>
+    <strong>Event:</strong> @Model.Event.EventName
+    <br />
+    <strong>Venue:</strong> @Model.Venue.VenueName
+    <br />
+    <strong>Booking Date:</strong> @Model.BookingDate.ToString("MM/dd/yyyy")
+</div>
+
+<a href="@Url.Action("Index")" class="btn btn-secondary">Back to list</a>

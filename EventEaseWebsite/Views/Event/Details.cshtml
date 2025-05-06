@@ -1,0 +1,19 @@
+@model EventEase.Models.Event
+
+@{
+    ViewData["Title"] = "Event Details";
+}
+
+<h2>Event Details</h2>
+
+<div>
+    <strong>Event Name:</strong> @Model.EventName
+    <br />
+    <strong>Event Date:</strong> @Model.EventDate.ToString("MM/dd/yyyy")
+    <br />
+    <strong>Venue:</strong> @Model.Venue.VenueName
+    <br />
+    <strong>Description:</strong> @Model.Description
+</div>
+
+<a href="@Url.Action("Index")" class="btn btn-secondary">Back to list</a>

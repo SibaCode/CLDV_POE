@@ -1,0 +1,23 @@
+@model EventEase.Models.Event
+
+@{
+    ViewData["Title"] = "Delete Event";
+}
+
+<h2>Delete Event</h2>
+
+<h3>Are you sure you want to delete this event?</h3>
+
+<div>
+    <strong>Event Name:</strong> @Model.EventName
+    <br />
+    <strong>Event Date:</strong> @Model.EventDate.ToString("MM/dd/yyyy")
+    <br />
+    <strong>Venue:</strong> @Model.Venue.VenueName
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="EventId" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a href="@Url.Action("Index")" class="btn btn-secondary">Cancel</a>
+</form>

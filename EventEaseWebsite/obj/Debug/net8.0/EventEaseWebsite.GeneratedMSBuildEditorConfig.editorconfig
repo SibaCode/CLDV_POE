@@ -1,0 +1,115 @@
+is_global = true
+build_property.TargetFramework = net8.0
+build_property.TargetFramework = net8.0
+build_property.TargetPlatformMinVersion = 
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = EventEaseWebsite
+build_property.RootNamespace = EventEaseWebsite
+build_property.ProjectDir = /home/sibahle/Pictures/CLDV_POE/EventEaseWebsite/
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.RazorLangVersion = 8.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = /home/sibahle/Pictures/CLDV_POE/EventEaseWebsite
+build_property._RazorSourceGeneratorDebug = 
+
+[/home/sibahle/Pictures/CLDV_POE/EventEaseWebsite/Views/Booking/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQm9va2luZy9DcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/sibahle/Pictures/CLDV_POE/EventEaseWebsite/Views/Booking/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQm9va2luZy9EZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/sibahle/Pictures/CLDV_POE/EventEaseWebsite/Views/Booking/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQm9va2luZy9EZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/sibahle/Pictures/CLDV_POE/EventEaseWebsite/Views/Booking/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQm9va2luZy9FZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/sibahle/Pictures/CLDV_POE/EventEaseWebsite/Views/Booking/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQm9va2luZy9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/sibahle/Pictures/CLDV_POE/EventEaseWebsite/Views/Event/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRXZlbnQvQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/sibahle/Pictures/CLDV_POE/EventEaseWebsite/Views/Event/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRXZlbnQvRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/sibahle/Pictures/CLDV_POE/EventEaseWebsite/Views/Event/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRXZlbnQvRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/sibahle/Pictures/CLDV_POE/EventEaseWebsite/Views/Event/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRXZlbnQvRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/sibahle/Pictures/CLDV_POE/EventEaseWebsite/Views/Event/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRXZlbnQvSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/sibahle/Pictures/CLDV_POE/EventEaseWebsite/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/sibahle/Pictures/CLDV_POE/EventEaseWebsite/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9Qcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/sibahle/Pictures/CLDV_POE/EventEaseWebsite/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0Vycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/sibahle/Pictures/CLDV_POE/EventEaseWebsite/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/sibahle/Pictures/CLDV_POE/EventEaseWebsite/Views/Venue/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVmVudWUvQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/sibahle/Pictures/CLDV_POE/EventEaseWebsite/Views/Venue/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVmVudWUvRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/sibahle/Pictures/CLDV_POE/EventEaseWebsite/Views/Venue/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVmVudWUvRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/sibahle/Pictures/CLDV_POE/EventEaseWebsite/Views/Venue/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVmVudWUvRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/sibahle/Pictures/CLDV_POE/EventEaseWebsite/Views/Venue/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVmVudWUvSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/sibahle/Pictures/CLDV_POE/EventEaseWebsite/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/sibahle/Pictures/CLDV_POE/EventEaseWebsite/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/home/sibahle/Pictures/CLDV_POE/EventEaseWebsite/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-jk1gndt0t5

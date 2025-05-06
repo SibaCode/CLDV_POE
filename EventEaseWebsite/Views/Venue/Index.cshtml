@@ -1,0 +1,29 @@
+@model IEnumerable<EventEase.Models.Venue>  // The model type should match the controller's passed model type
+
+<h1>Venues</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Venue Name</th>
+            <th>Location</th>
+            <th>Capacity</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var venue in Model)
+        {
+            <tr>
+                <td>@venue.VenueName</td>
+                <td>@venue.Location</td>
+                <td>@venue.Capacity</td>
+                <td>
+                    <a href="@Url.Action("Edit", "Venue", new { id = venue.VenueId })">Edit</a> |
+                    <a href="@Url.Action("Delete", "Venue", new { id = venue.VenueId })">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("Create", "Venue")" class="btn btn-primary">Create New Venue</a>
