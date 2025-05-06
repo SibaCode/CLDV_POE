@@ -4,25 +4,26 @@
     ViewData["Title"] = "Venue Details";
 }
 <h2>Venue Details</h2>
-
 <div class="container mt-5">
     <div class="card shadow rounded-4">
-        <div class="card-header bg-dark text-white">
-            <h2>@Model.VenueName</h2>
+        <div class="card-header bg-danger text-white">
+            <h2>Update Venue</h2>
         </div>
         <div class="card-body">
-    <p><strong>Location:</strong> @Model.Location</p>
-    <p><strong>Capacity:</strong> @Model.Capacity</p>
-    <p><img src="@Model.ImageUrl" alt="Venue image" width="300" /></p>
+            <ul class="list-group list-group-flush mb-3">
+                <li class="list-group-item"><strong>Name:</strong> @Model.VenueName</li>
+                <li class="list-group-item"><strong>Location:</strong> @Model.Location</li>
+                <li class="list-group-item"><strong>Capacity:</strong> @Model.Capacity</li>
+            </ul>
 
-<a asp-action="Edit" class="btn btn-primary" asp-route-id="@Model.VenueId">Edit</a> |
+          <form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="VenueId" />
+    <a asp-action="Edit" class="btn btn-primary" asp-route-id="@Model.VenueId">Edit</a> |
 <a asp-action="Index" class="btn btn-primary">Back to List</a>
 
+</form>
+
         </div>
-      <div>
-</div>
-
-
     </div>
 </div>
 
