@@ -1,13 +1,22 @@
-@model IEnumerable<EventEase.Models.Venue>  // The model type should match the controller's passed model type
+@model IEnumerable<EventEase.Models.Venue>
 
-<h1>Venues</h1>
-<table class="table">
-    <thead>
+@{
+    ViewData["Title"] = "Venues";
+}
+
+<h1 class="text-center my-4">Venues</h1>
+
+<div class="d-flex justify-content-end mb-4">
+    <a href="@Url.Action("Create")" class="btn btn-primary">Create New Venue</a>
+</div>
+
+<table class="table table-striped table-hover">
+    <thead class="thead-dark">
         <tr>
-            <th>Venue Name</th>
-            <th>Location</th>
-            <th>Capacity</th>
-            <th>Actions</th>
+            <th scope="col">Venue Name</th>
+            <th scope="col">Location</th>
+            <th scope="col">Capacity</th>
+            <th scope="col">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -18,12 +27,10 @@
                 <td>@venue.Location</td>
                 <td>@venue.Capacity</td>
                 <td>
-                    <a href="@Url.Action("Edit", "Venue", new { id = venue.VenueId })">Edit</a> |
-                    <a href="@Url.Action("Delete", "Venue", new { id = venue.VenueId })">Delete</a>
+                    <a href="@Url.Action("Edit", new { id = venue.VenueId })" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="@Url.Action("Delete", new { id = venue.VenueId })" class="btn btn-danger btn-sm">Delete</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
-
-<a href="@Url.Action("Create", "Venue")" class="btn btn-primary">Create New Venue</a>
