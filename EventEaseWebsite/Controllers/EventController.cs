@@ -1,20 +1,28 @@
 using EventEase.Data;
 using EventEase.Models;
+using EventEase.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Threading.Tasks;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 
 namespace EventEase.Controllers
 {
     public class EventController : Controller
     {
         private readonly AppDbContext _context;
-
-        public EventController(AppDbContext context)
+        private readonly IBlobService _blobService;
+        private readonly IConfiguration _configuration;
+        public EventController(AppDbContext context , IBlobService blobService , IConfiguration configuration)
         {
             _context = context;
+            _blobService = blobService;
+            _configuration = configuration;
         }
 public async Task<IActionResult> Index(string searchString)
 {
@@ -50,21 +58,28 @@ public async Task<IActionResult> Index(string searchString)
             return View();
         }
 
-        // POST: Event/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EventId,EventName,EventDate,Description,VenueId")] Event @event)
+       [HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Create(Event @event, IFormFile imageFile)
+{
+    if (ModelState.IsValid)
+    {
+        if (imageFile != null && imageFile.Length > 0)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(@event);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-
-            ViewBag.VenueList = new SelectList(_context.Venues, "VenueId", "VenueName", @event.VenueId);
-            return View(@event);
+            // Upload image to Azure Blob Storage and get SAS URL
+            var imageUrl = await _blobService.UploadFileAsync(imageFile, "event-images");
+            @event.ImageUrl = imageUrl;
         }
+
+        _context.Add(@event);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
+    }
+
+    ViewBag.VenueList = new SelectList(_context.Venues, "VenueId", "VenueName", @event.VenueId);
+    return View(@event);
+}
+
 
 // GET: Event/Edit/5
   public async Task<IActionResult> Edit(int? id)

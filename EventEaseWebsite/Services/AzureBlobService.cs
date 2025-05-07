@@ -23,39 +23,31 @@ namespace EventEase.Services
 
 public async Task<string> UploadFileAsync(IFormFile file, string containerName)
 {
-       var blobServiceClient = new BlobServiceClient(_connectionString);
-        var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
-        await containerClient.CreateIfNotExistsAsync();
+    var blobServiceClient = new BlobServiceClient(_connectionString);
+    var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+    await containerClient.CreateIfNotExistsAsync();
+    await containerClient.SetAccessPolicyAsync(PublicAccessType.None); // Keep private
 
-        var blobName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-        var blobClient = containerClient.GetBlobClient(blobName);
+    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+    var blobClient = containerClient.GetBlobClient(fileName);
 
-        using (var stream = file.OpenReadStream())
-        {
-            await blobClient.UploadAsync(stream, overwrite: true);
-        }
+    using (var stream = file.OpenReadStream())
+    {
+        await blobClient.UploadAsync(stream, true);
+    }
 
-        // Generate SAS token
-        if (blobClient.CanGenerateSasUri)
-        {
-            var sasBuilder = new BlobSasBuilder
-            {
-                BlobContainerName = containerName,
-                BlobName = blobName,
-                Resource = "b", // 'b' = blob
-                ExpiresOn = DateTimeOffset.UtcNow.AddHours(6)
-            };
-            sasBuilder.SetPermissions(BlobSasPermissions.Read);
+    // Generate SAS
+    var sasBuilder = new BlobSasBuilder
+    {
+        BlobContainerName = containerName,
+        BlobName = fileName,
+        Resource = "b",
+        ExpiresOn = DateTimeOffset.UtcNow.AddHours(12)
+    };
+    sasBuilder.SetPermissions(BlobSasPermissions.Read);
 
-            Uri sasUri = blobClient.GenerateSasUri(sasBuilder);
-            return sasUri.ToString();
-        }
-
-        // Fallback if SAS cannot be generated
-        return blobClient.Uri.ToString();
-    
+    return blobClient.GenerateSasUri(sasBuilder).ToString();
 }
-
 public async Task DeleteFileAsync(string blobName, string containerName)
 {
     var blobClient = new BlobContainerClient(_connectionString, containerName);

@@ -5,7 +5,8 @@
 
 <h2>Create Event</h2>
 
-<form asp-action="Create" method="post">
+<form asp-action="Create" enctype="multipart/form-data" method="post">
+    
     <div class="form-group">
         <label asp-for="EventName" class="control-label"></label>
         <input asp-for="EventName" class="form-control" />
@@ -29,7 +30,10 @@
         <select asp-for="VenueId" class="form-control" asp-items="ViewBag.VenueList"></select>
         <span asp-validation-for="VenueId" class="text-danger"></span>
     </div>
-
+<div class="form-group">
+        <label>Venue Image</label>
+        <input type="file" name="imageFile" class="form-control" />
+    </div>
     <button type="submit" class="btn btn-primary">Create</button>
 </form>
 
