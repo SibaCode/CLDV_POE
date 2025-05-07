@@ -103,32 +103,36 @@ public async Task<IActionResult> Edit(int id, [Bind("EventId,EventName,EventDate
     return View(@event);
 }
 
-        // GET: Event/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null) return NotFound();
+// GET: Event/Delete/5
+public async Task<IActionResult> Delete(int id)
+{
+    var @event = await _context.Events
+        .Include(e => e.Venue)  // Optionally include Venue
+        .FirstOrDefaultAsync(m => m.EventId == id);
 
-            var @event = await _context.Events
-                .Include(e => e.Venue)
-                .FirstOrDefaultAsync(m => m.EventId == id);
-            if (@event == null) return NotFound();
+    if (@event == null)
+    {
+        return NotFound();
+    }
 
-            return View(@event);
-        }
+    return View(@event);
+}
 
-        // POST: Event/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var @event = await _context.Events.FindAsync(id);
-            if (@event != null)
-            {
-                _context.Events.Remove(@event);
-                await _context.SaveChangesAsync();
-            }
-            return RedirectToAction(nameof(Index));
-        }
+// POST: Event/Delete/5
+[HttpPost, ActionName("Delete")]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> DeleteConfirmed(int id)
+{
+    var @event = await _context.Events.FindAsync(id);
+    if (@event == null)
+    {
+        return NotFound();
+    }
+
+    _context.Events.Remove(@event);
+    await _context.SaveChangesAsync();
+    return RedirectToAction(nameof(Index));
+}
 
         private bool EventExists(int id)
         {
