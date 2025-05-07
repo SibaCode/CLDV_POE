@@ -1,5 +1,6 @@
 using EventEase.Data;
 using EventEase.Models;
+using EventEase.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,10 +12,14 @@ namespace EventEase.Controllers
     public class VenueController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IBlobService _blobService;
+        private readonly IConfiguration _configuration;
 
-        public VenueController(AppDbContext context)
+        public VenueController(AppDbContext context , IBlobService blobService , IConfiguration configuration) 
         {
             _context = context;
+            _blobService = blobService;
+            _configuration = configuration;
         }
 
         public async Task<IActionResult> Index(string searchString)
@@ -45,25 +50,30 @@ namespace EventEase.Controllers
             }
 
 
-        // GET: Venue/Create
-        public IActionResult Create()
+        
+public IActionResult Create() => View();
+
+// POST
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Create(Venue venue, IFormFile imageFile)
+{
+    if (ModelState.IsValid)
+    {
+        if (imageFile != null && imageFile.Length > 0)
         {
-            return View();
+            // var containerName = _configuration.GetSection("AzureBlobStorage")["ContainerName"];
+            venue.ImageUrl = await _blobService.UploadFileAsync(imageFile, "eventeaseimages");
         }
 
-        // POST: Venue/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("VenueName,Location,Capacity")] Venue venue)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(venue);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(venue);
-        }
+        _context.Add(venue);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
+    }
+
+    return View(venue);
+}
+      
 
         // GET: Venue/Edit/5
       public async Task<IActionResult> Edit(int? id)
