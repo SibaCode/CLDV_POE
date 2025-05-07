@@ -47,9 +47,6 @@ This is the admin platform for EventEaseWebsite, an event management company. It
 
 ---
 
-## 🧠 Database Design & Cognitive Search
-
-See full discussion in `/Docs/Database_Design.md` (or include it here).
 
 ---
 
