@@ -23,7 +23,11 @@ namespace EventEase.Controllers
             _context = context;
             _blobService = blobService;
             _configuration = configuration;
-        }
+        }private bool VenueExists(int id)
+{
+    return _context.Venues.Any(e => e.VenueId == id);
+}
+
 
         public async Task<IActionResult> Index(string searchString)
             {
@@ -95,34 +99,50 @@ public async Task<IActionResult> Create(Venue venue, IFormFile imageFile)
         }
          [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("VenueId,VenueName,Location,Capacity")] Venue venue)
+        public async Task<IActionResult> Edit(int id, [Bind("VenueId,VenueName,Location,Capacity")] Venue venue , IFormFile imageFile)
         {
-            if (id != venue.VenueId)
+           if (id != venue.VenueId)
+    {
+        return NotFound();
+    }
+
+    if (ModelState.IsValid)
+    {
+        try
+        {
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                // Upload the new image and get the URL
+                var imageUrl = await _blobService.UploadFileAsync(imageFile, "venue-images");
+
+                // Optionally, delete the old image if you want
+                if (!string.IsNullOrEmpty(venue.ImageUrl))
+                {
+                    var oldImageName = Path.GetFileName(new Uri(venue.ImageUrl).LocalPath);
+                    await _blobService.DeleteFileAsync(oldImageName, "venue-images");
+                }
+
+                venue.ImageUrl = imageUrl; // Set the new image URL
+            }
+
+            _context.Update(venue);
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!VenueExists(venue.VenueId))
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            else
             {
-                try
-                {
-                    _context.Update(venue);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.Venues.Any(e => e.VenueId == venue.VenueId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                throw;
             }
-            return View(venue);
+        }
+
+        return RedirectToAction(nameof(Index));
+    }
+    return View(venue);
         }
 [Route("Venue/Image/{fileName}")]
 public async Task<IActionResult> GetImage(string fileName)

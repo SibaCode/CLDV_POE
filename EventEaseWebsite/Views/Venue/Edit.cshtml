@@ -7,7 +7,7 @@
 <h1 class="text-center my-4">Edit Venue</h1>
 
 <div class="container">
-    <form asp-action="Edit">
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label asp-for="VenueName" class="control-label">Venue Name</label>
             <input asp-for="VenueName" class="form-control" />
@@ -25,6 +25,28 @@
             <input asp-for="Capacity" class="form-control" />
             <span asp-validation-for="Capacity" class="text-danger"></span>
         </div>
+
+        <div class="form-group">
+            <label>Current Image</label>
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" alt="Venue Image" width="100" height="80" />
+            }
+            else
+            {
+                <p>No image available.</p>
+            }
+        </div>
+
+        <!-- File Upload Field -->
+        <div class="form-group">
+            <label>Venue Image</label>
+            <input type="file" name="imageFile" class="form-control" />
+            <span class="text-muted">Upload a new image if you wish to change the current one.</span>
+        </div>
+
+        <!-- Hidden field for the current ImageUrl -->
+        <input type="hidden" asp-for="ImageUrl" />
 
         <div class="form-group">
             <input type="hidden" asp-for="VenueId" />

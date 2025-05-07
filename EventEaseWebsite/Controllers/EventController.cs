@@ -102,7 +102,7 @@ public async Task<IActionResult> Create(Event @event, IFormFile imageFile)
 
 [HttpPost]
 [ValidateAntiForgeryToken]
-public async Task<IActionResult> Edit(int id, [Bind("EventId,EventName,EventDate,Description,VenueId")] Event @event)
+public async Task<IActionResult> Edit(int id, [Bind("EventId,EventName,EventDate,Description,VenueId,ImageUrl")] Event @event, IFormFile imageFile)
 {
     if (id != @event.EventId)
     {
@@ -113,6 +113,15 @@ public async Task<IActionResult> Edit(int id, [Bind("EventId,EventName,EventDate
     {
         try
         {
+            // If an image file is provided, upload it and update the ImageUrl
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                // Upload the new image and get the new URL
+                var imageUrl = await _blobService.UploadFileAsync(imageFile, "event-images");
+                @event.ImageUrl = imageUrl; // Update the ImageUrl property
+            }
+            // If no image is uploaded, retain the existing ImageUrl (don't modify it)
+            
             _context.Update(@event);
             await _context.SaveChangesAsync();
         }
@@ -130,12 +139,10 @@ public async Task<IActionResult> Edit(int id, [Bind("EventId,EventName,EventDate
         return RedirectToAction(nameof(Index));
     }
 
-    // Ensure the VenueList is set for the dropdown
+    // Populate the VenueList dropdown
     ViewBag.VenueList = new SelectList(_context.Venues, "VenueId", "VenueName", @event.VenueId);
     return View(@event);
 }
-
-// GET: Event/Delete/5
 public async Task<IActionResult> Delete(int? id)
 {
     if (id == null)

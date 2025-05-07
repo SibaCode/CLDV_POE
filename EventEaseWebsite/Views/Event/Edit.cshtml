@@ -6,7 +6,7 @@
 
 <h1>Edit Event</h1>
 
-<form method="post" asp-action="Edit">
+<form method="post" enctype="multipart/form-data" asp-action="Edit">
     @Html.AntiForgeryToken()
 
     <!-- Hidden input for EventId -->
@@ -34,6 +34,23 @@
         <label asp-for="VenueId" class="control-label"></label>
         <select asp-for="VenueId" class="form-control" asp-items="ViewBag.VenueList"></select>
         <span asp-validation-for="VenueId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="imageFile" class="control-label">Event Image</label>
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <div>
+                <img src="@Model.ImageUrl" alt="Event Image" class="img-fluid" style="max-width: 200px;" />
+            </div>
+            <div>
+                <label>
+                    <input type="checkbox" name="removeImage" /> Remove image
+                </label>
+            </div>
+        }
+        <input type="file" id="imageFile" name="imageFile" class="form-control" />
+        <span class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary">Save changes</button>
