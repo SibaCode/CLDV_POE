@@ -17,21 +17,32 @@ namespace EventEase.Controllers
             _context = context;
         }
 
-        // GET: Venue
-       public async Task<IActionResult> Index()
-{
-    var venues = await _context.Venues.ToListAsync();
+        public async Task<IActionResult> Index(string searchString)
+            {
+                var venuesQuery = _context.Venues.AsQueryable();
 
-    // Create a dictionary of VenueId to Booking existence
-    var bookedVenueIds = _context.Bookings
-                                 .Select(b => b.VenueId)
-                                 .Distinct()
-                                 .ToHashSet();
+                if (!string.IsNullOrEmpty(searchString))
+                {
+                    venuesQuery = venuesQuery.Where(v =>
+                        v.VenueName.Contains(searchString) ||
+                        v.Location.Contains(searchString) ||
+                        v.Capacity.ToString().Contains(searchString)
+                    );
+                }
 
-    ViewBag.BookedVenueIds = bookedVenueIds;
+                var venues = await venuesQuery.ToListAsync();
 
-    return View(venues);
-}
+                // Get booked VenueIds
+                var bookedVenueIds = _context.Bookings
+                                            .Select(b => b.VenueId)
+                                            .Distinct()
+                                            .ToHashSet();
+
+                ViewBag.BookedVenueIds = bookedVenueIds;
+                ViewBag.CurrentFilter = searchString;
+
+                return View(venues);
+            }
 
 
         // GET: Venue/Create

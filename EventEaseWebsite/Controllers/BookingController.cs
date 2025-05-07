@@ -16,15 +16,29 @@ namespace EventEase.Controllers
         {
             _context = context;
         }
-        public async Task<IActionResult> Index()
-                {
-                    var bookings = _context.Bookings
-                    .Include(b => b.Event)
-                    .Include(b => b.Venue)
-                    .OrderByDescending(b => b.BookingDate);
+        public async Task<IActionResult> Index(string searchString)
+{
+    var bookingsQuery = _context.Bookings
+        .Include(b => b.Event)
+        .Include(b => b.Venue)
+        .AsQueryable();
 
-                return View(await bookings.ToListAsync());
-            }
+    if (!string.IsNullOrEmpty(searchString))
+    {
+        bookingsQuery = bookingsQuery.Where(b =>
+            b.Event.EventName.Contains(searchString) ||
+            b.Venue.VenueName.Contains(searchString) ||
+            b.BookingDate.ToString().Contains(searchString)
+        );
+    }
+
+    var bookings = await bookingsQuery.OrderByDescending(b => b.BookingDate).ToListAsync();
+    ViewBag.CurrentFilter = searchString;
+
+    return View(bookings);
+}
+
+
         public IActionResult Create()
         {
             ViewBag.VenueList = new SelectList(_context.Venues, "VenueId", "VenueName");

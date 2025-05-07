@@ -9,6 +9,13 @@
 <p>
     <a href="@Url.Action("Create")" class="btn btn-primary">Create New Booking</a>
 </p>
+<form asp-action="Index" method="get" class="mb-3">
+    <div class="input-group">
+        <input type="text" name="searchString" value="@ViewBag.CurrentFilter" class="form-control" placeholder="Search by event, venue or date" />
+        <button type="submit" class="btn btn-outline-primary">Search</button>
+    </div>
+</form>
+
 
 <table class="table table-bordered table-striped">
     <thead>
