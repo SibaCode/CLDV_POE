@@ -1,24 +1,39 @@
-@model List<EventEase.Models.Event> 
+@model IEnumerable<EventEase.Models.Event>
 
-<h1>Events</h1>
-<table class="table">
+@{
+    ViewData["Title"] = "Events";
+}
+
+<h2>Events</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+
+<table class="table table-striped">
     <thead>
         <tr>
             <th>Event Name</th>
             <th>Event Date</th>
-            <th>Venue</th>
             <th>Description</th>
+            <th>Venue</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.EventName</td>
-                <td>@item.EventDate.ToShortDateString()</td>
-                <td>@item.Venue.VenueName</td>
-                <td>@item.Description</td>
-            </tr>
-        }
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@item.EventName</td>
+        <td>@item.EventDate.ToString("yyyy-MM-dd HH:mm")</td>
+        <td>@item.Description</td>
+        <td>@item.Venue?.VenueName</td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.EventId" class="btn btn-sm btn-warning">Edit</a>
+            <a asp-action="Details" asp-route-id="@item.EventId" class="btn btn-sm btn-info">Details</a>
+            <a asp-action="Delete" asp-route-id="@item.EventId" class="btn btn-sm btn-danger">Delete</a>
+        </td>
+    </tr>
+}
     </tbody>
 </table>
