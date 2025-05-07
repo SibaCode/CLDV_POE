@@ -6,24 +6,27 @@
 
 <h1>Edit Booking</h1>
 
-<form method="post" asp-action="Edit">
-    @Html.AntiForgeryToken()
-
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="BookingId" />
+    
     <div class="form-group">
-        <label asp-for="EventId" class="control-label"></label>
+        <label asp-for="EventId"></label>
         <select asp-for="EventId" class="form-control" asp-items="ViewBag.EventList"></select>
         <span asp-validation-for="EventId" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="BookingDate" class="control-label"></label>
-        <input asp-for="BookingDate" class="form-control" />
+        <label asp-for="VenueId"></label>
+        <select asp-for="VenueId" class="form-control" asp-items="ViewBag.VenueList"></select>
+        <span asp-validation-for="VenueId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="BookingDate"></label>
+        <input asp-for="BookingDate" class="form-control" type="date" />
         <span asp-validation-for="BookingDate" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary">Save changes</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>
-
-<div>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-</div>

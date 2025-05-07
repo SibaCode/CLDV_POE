@@ -51,35 +51,26 @@ namespace EventEase.Controllers
             return View(booking);
         }
 
-        // GET: Booking/Edit/5
+       // GET: Booking/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var booking = await _context.Bookings
-                .Include(b => b.Event)
-                .FirstOrDefaultAsync(m => m.BookingId == id);
-            if (booking == null)
-            {
-                return NotFound();
-            }
+            var booking = await _context.Bookings.FindAsync(id);
+            if (booking == null) return NotFound();
 
+            ViewBag.VenueList = new SelectList(_context.Venues, "VenueId", "VenueName", booking.VenueId);
             ViewBag.EventList = new SelectList(_context.Events, "EventId", "EventName", booking.EventId);
+
             return View(booking);
         }
 
         // POST: Booking/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BookingId,EventId,BookingDate")] Booking booking)
+        public async Task<IActionResult> Edit(int id, Booking booking)
         {
-            if (id != booking.BookingId)
-            {
-                return NotFound();
-            }
+            if (id != booking.BookingId) return NotFound();
 
             if (ModelState.IsValid)
             {
@@ -90,23 +81,19 @@ namespace EventEase.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BookingExists(booking.BookingId))
-                    {
+                    if (!_context.Bookings.Any(e => e.BookingId == booking.BookingId))
                         return NotFound();
-                    }
                     else
-                    {
                         throw;
-                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
 
+            ViewBag.VenueList = new SelectList(_context.Venues, "VenueId", "VenueName", booking.VenueId);
             ViewBag.EventList = new SelectList(_context.Events, "EventId", "EventName", booking.EventId);
             return View(booking);
         }
 
-        // GET: Booking/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
