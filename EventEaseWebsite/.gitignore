@@ -1,0 +1,1 @@
+echo "EventEaseWebsite/bin/Debug/net8.0/appsettings.json" >> .gitignore
