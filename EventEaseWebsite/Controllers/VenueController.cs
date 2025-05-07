@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
 using System.Threading.Tasks;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models; // ⬅️ Required for BlobHttpHeaders
+
 
 namespace EventEase.Controllers
 {
@@ -121,6 +124,21 @@ public async Task<IActionResult> Create(Venue venue, IFormFile imageFile)
             }
             return View(venue);
         }
+[Route("Venue/Image/{fileName}")]
+public async Task<IActionResult> GetImage(string fileName)
+{
+    var containerName = "eventeaseimages";
+    var containerClient = new BlobContainerClient(_configuration.GetConnectionString("AzureBlobStorage"), containerName);
+    var blobClient = containerClient.GetBlobClient(fileName);
+
+    if (!await blobClient.ExistsAsync())
+    {
+        return NotFound();
+    }
+
+    var blobDownloadInfo = await blobClient.DownloadAsync();
+    return File(blobDownloadInfo.Value.Content, blobDownloadInfo.Value.ContentType);
+}
 
         // GET: Venue/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -150,5 +168,7 @@ public async Task<IActionResult> Create(Venue venue, IFormFile imageFile)
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        
     }
 }
