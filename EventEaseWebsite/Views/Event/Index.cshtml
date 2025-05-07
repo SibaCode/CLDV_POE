@@ -21,18 +21,61 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model)
-{
-    <tr>
-        <td>@item.EventName</td>
-        <td>@item.EventDate.ToString("yyyy-MM-dd HH:mm")</td>
-        <td>@item.Description</td>
-        <td>@item.Venue?.VenueName</td>
-        <td>
-            <a asp-action="Edit" asp-route-id="@item.EventId" class="btn btn-sm btn-warning">Edit</a>
-            <a asp-action="Delete" asp-route-id="@item.EventId" class="btn btn-sm btn-danger">Delete</a>
-        </td>
-    </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.EventName</td>
+                <td>@item.EventDate.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@item.Description</td>
+                <td>@item.Venue?.VenueName</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.EventId" class="btn btn-sm btn-warning">Edit</a>
+                    
+                    @if (((HashSet<int>)ViewBag.BookedEventIds).Contains(item.EventId))
+            {
+                <!-- Delete button for linked events -->
+                <a href="#" class="btn btn-danger linked-delete" data-message="This event is linked to a booking and cannot be deleted.">Delete</a>
+                <!-- Error message to show when attempting to delete linked event -->
+                <div class="error-message" style="display:none; color: red;">This event is linked to a booking and cannot be deleted.</div>
+            }
+            else
+            { 
+                <!-- Normal Delete button for non-linked events -->
+                <a asp-action="Delete" asp-route-id="@item.EventId" class="btn btn-danger not-linked-delete">Delete</a>
+            }
+                </td>
+                 
+            </tr>
+        }
     </tbody>
 </table>
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Select all linked-delete buttons
+            const linkedDeleteButtons = document.querySelectorAll(".linked-delete");
+
+            linkedDeleteButtons.forEach(button => {
+                button.addEventListener("click", function (e) {
+                    e.preventDefault(); // Prevent the default action (which would be a form submission)
+
+                    // Find the closest error message in the row and display it
+                    const errorMessage = button.closest('td').querySelector('.error-message');
+                    if (errorMessage) {
+                        errorMessage.style.display = 'block'; // Show the error message
+                    }
+                });
+            });
+
+            // Optionally, hide the error message if the user clicks anywhere else (on a non-linked delete button)
+            document.querySelectorAll(".not-linked-delete").forEach(button => {
+                button.addEventListener("click", function () {
+                    // Hide all error messages when other delete buttons are clicked
+                    document.querySelectorAll('.error-message').forEach(error => {
+                        error.style.display = 'none';
+                    });
+                });
+            });
+        });
+    </script>
+}

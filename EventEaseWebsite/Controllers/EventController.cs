@@ -17,14 +17,21 @@ namespace EventEase.Controllers
             _context = context;
         }
 
-        // GET: Event
         public async Task<IActionResult> Index()
         {
-            var events = await _context.Events
-                .Include(e => e.Venue)
-                .ToListAsync();
+            var events = await _context.Events.ToListAsync();
+
+            // Find all EventIds that are linked to Bookings
+            var bookedEventIds = _context.Bookings
+                                        .Select(b => b.EventId)
+                                        .Distinct()
+                                        .ToHashSet();
+
+            ViewBag.BookedEventIds = bookedEventIds;
+
             return View(events);
         }
+
 
         // GET: Event/Create
         public IActionResult Create()
