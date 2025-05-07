@@ -1,0 +1,41 @@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h1>Admin Dashboard</h1>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Venues</h5>
+                <p class="card-text display-4">@ViewBag.TotalVenues</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Events</h5>
+                <p class="card-text display-4">@ViewBag.TotalEvents</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Bookings</h5>
+                <p class="card-text display-4">@ViewBag.TotalBookings</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Links section -->
+<div class="row mt-4">
+    <div class="col-md-12 text-center">
+        <a href="/Venue/Index" class="btn btn-outline-primary m-2">Manage Venues</a>
+        <a href="/Event/Index" class="btn btn-outline-success m-2">Manage Events</a>
+        <a href="/Booking/Index" class="btn btn-outline-warning m-2">Manage Bookings</a>
+    </div>
+</div>

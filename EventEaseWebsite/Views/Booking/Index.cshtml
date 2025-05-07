@@ -1,51 +1,52 @@
 @model IEnumerable<EventEase.Models.Booking>
-
 @{
     ViewData["Title"] = "Bookings";
 }
 
-<h2>Bookings</h2>
+<h2 class="mb-4">Bookings</h2>
 
-
-<div class="d-flex justify-content-end mb-4">
-    <a href="@Url.Action("Create")" class="btn btn-primary">Create New Booking</a>
-</div>
-<form asp-action="Index" method="get" class="mb-3">
+<form asp-action="Index" method="get" class="mb-4">
     <div class="input-group">
-        <input type="text" name="searchString" value="@ViewBag.CurrentFilter" class="form-control" placeholder="Search by event, venue or date" />
-        <button type="submit" class="btn btn-outline-primary">Search</button>
+        <input type="text" name="searchString" class="form-control" placeholder="Search by Event, Venue, or Date..." value="@ViewBag.CurrentFilter" />
+        <button type="submit" class="btn btn-outline-secondary">Search</button>
     </div>
 </form>
+<div class="mt-4">
+    <a asp-action="Create" class="btn btn-success">+ Add New Booking</a>
+</div>
+<hr>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    @if (Model.Any())
+    {
+        foreach (var booking in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm border-0">
+                    <img src="@booking.Venue?.ImageUrl" class="card-img-top" alt="@booking.Venue?.VenueName" style="height: 200px; object-fit: cover;" />
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">@booking.Event?.EventName</h5>
+                        <p class="card-text">
+                            <strong>Venue:</strong> @booking.Venue?.VenueName<br />
+                            <strong>Date:</strong> @booking.BookingDate.ToString("dddd, MMM dd, yyyy")<br />
+                            <strong>Description:</strong> @booking.Event?.Description
 
+                        </p>
+                    </div>
+                    <div class="card-footer bg-white border-0 d-flex justify-content-between">
+                        <a asp-action="Details" asp-route-id="@booking.BookingId" class="btn btn-sm btn-info">View Details</a>
+                        <a asp-action="Edit" asp-route-id="@booking.BookingId" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@booking.BookingId" class="btn btn-sm btn-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col">
+            <div class="alert alert-info w-100">No bookings found.</div>
+        </div>
+    }
+</div>
 
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>Booking ID</th>
-            <th>Event Name</th>
-            <th>Venue Name</th>
-            <th>Booking Date</th>
-            <th>Event Date</th>
-            <th>Venue Location</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var booking in Model)
-{
-    <tr>
-        <td>@booking.BookingId</td>
-        <td>@booking.Event?.EventName</td>
-        <td>@booking.Venue?.VenueName</td>
-        <td>@booking.BookingDate.ToShortDateString()</td>
-        <td>@booking.Event?.EventDate.ToShortDateString()</td>
-        <td>@booking.Venue?.Location</td>
-        <td>
-            <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@booking.BookingId">Edit</a>
-            <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@booking.BookingId">Delete</a>
-        </td>
-    </tr>
-}
-    </tbody>
-</table>
 

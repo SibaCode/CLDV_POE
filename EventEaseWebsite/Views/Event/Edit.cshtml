@@ -43,19 +43,16 @@
             <div>
                 <img src="@Model.ImageUrl" alt="Event Image" class="img-fluid" style="max-width: 200px;" />
             </div>
-            <div>
-                <label>
-                    <input type="checkbox" name="removeImage" /> Remove image
-                </label>
-            </div>
         }
+        <div class="form-group">
         <input type="file" id="imageFile" name="imageFile" class="form-control" />
+         </div>
         <span class="text-danger"></span>
     </div>
 
+    <div class="form-group">
     <button type="submit" class="btn btn-primary">Save changes</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</div>
 </form>
 
-<div>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-</div>

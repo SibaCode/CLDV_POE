@@ -2,27 +2,37 @@
 
 @{
     ViewData["Title"] = "Booking Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Booking Details</h1>
+<h1 class="mb-4">Booking Details</h1>
 
-<div>
-    <h4>Booking</h4>
-    <dl class="dl-horizontal">
-        <dt>Event</dt>
-        <dd>@Model.Event?.EventName</dd>
-        <dt>Venue</dt>
-        <dd>@Model.Venue?.VenueName</dd> <!-- Access Venue details -->
-        <dt>Booking Date</dt>
-        <dd>@Model.BookingDate</dd>
-    </dl>
+<div class="card shadow p-4 mb-4 bg-white rounded" style="max-width: 800px;">
+    <div class="row g-0">
+        <div class="col-md-4">
+            @if (!string.IsNullOrEmpty(Model.Event?.ImageUrl))
+            {
+                <img src="@Model.Event.ImageUrl" class="img-fluid rounded-start" alt="Event Image" />
+            }
+            else
+            {
+                <img src="~/images/default-event.jpg" class="img-fluid rounded-start" alt="Default Image" />
+            }
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h4 class="card-title">@Model.Event?.EventName</h4>
+                <p class="card-text"><strong>Description:</strong> @Model.Event?.Description</p>
+                <p class="card-text"><strong>Venue:</strong> @Model.Venue?.VenueName</p>
+                <p class="card-text"><strong>Location:</strong> @Model.Venue?.Location</p>
+                <p class="card-text"><strong>Date:</strong> @Model.BookingDate.ToString("dddd, dd MMM yyyy")</p>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div>
+<div class="d-flex gap-2">
     <a asp-action="Edit" asp-route-id="@Model.BookingId" class="btn btn-warning">Edit</a>
     <a asp-action="Delete" asp-route-id="@Model.BookingId" class="btn btn-danger">Delete</a>
-</div>
-
-<div>
     <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>

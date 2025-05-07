@@ -51,7 +51,7 @@ namespace EventEase.Controllers
 [ValidateAntiForgeryToken]
 public async Task<IActionResult> Create([Bind("BookingId, EventId, VenueId, BookingDate")] Booking booking)
 {
-    // Check if the venue is already booked for the same date
+    // Check for duplicate bookings
     bool isAlreadyBooked = await _context.Bookings
         .AnyAsync(b => b.VenueId == booking.VenueId 
                        && b.BookingDate.Date == booking.BookingDate.Date);
@@ -68,8 +68,13 @@ public async Task<IActionResult> Create([Bind("BookingId, EventId, VenueId, Book
         return RedirectToAction(nameof(Index));
     }
 
+    // Repopulate dropdowns
+    ViewBag.VenueList = new SelectList(_context.Venues, "VenueId", "VenueName", booking.VenueId);
+    ViewBag.EventList = new SelectList(_context.Events, "EventId", "EventName", booking.EventId);
+
     return View(booking);
 }
+
 
         public async Task<IActionResult> Edit(int? id)
         {
@@ -83,13 +88,12 @@ public async Task<IActionResult> Create([Bind("BookingId, EventId, VenueId, Book
 
             return View(booking);
         }
-
-        // POST: Booking/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Booking booking)
+        public async Task<IActionResult> Edit(int id, [Bind("BookingId, EventId, VenueId, BookingDate")] Booking booking)
         {
-            if (id != booking.BookingId) return NotFound();
+            if (id != booking.BookingId)
+                return NotFound();
 
             if (ModelState.IsValid)
             {
@@ -97,6 +101,7 @@ public async Task<IActionResult> Create([Bind("BookingId, EventId, VenueId, Book
                 {
                     _context.Update(booking);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -105,47 +110,51 @@ public async Task<IActionResult> Create([Bind("BookingId, EventId, VenueId, Book
                     else
                         throw;
                 }
-                return RedirectToAction(nameof(Index));
             }
 
+            // Repopulate dropdowns if validation fails
             ViewBag.VenueList = new SelectList(_context.Venues, "VenueId", "VenueName", booking.VenueId);
             ViewBag.EventList = new SelectList(_context.Events, "EventId", "EventName", booking.EventId);
+            
+            return View(booking);
+        }
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var booking = await _context.Bookings
+                .Include(b => b.Event)
+                .Include(b => b.Venue)
+                .FirstOrDefaultAsync(m => m.BookingId == id);
+
+            if (booking == null) return NotFound();
+
             return View(booking);
         }
 
        public async Task<IActionResult> Delete(int? id)
-{
-    if (id == null)
-    {
-        return NotFound();
-    }
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-    var venue = await _context.Venues
-        .FirstOrDefaultAsync(m => m.VenueId == id);
+            var booking = await _context.Bookings
+                .Include(b => b.Event)
+                .Include(b => b.Venue)
+                .FirstOrDefaultAsync(m => m.BookingId == id);
 
-    if (venue == null)
-    {
-        return NotFound();
-    }
+            if (booking == null)
+            {
+                return NotFound();
+            }
 
-    // Check if there are any active bookings for the venue
-    bool hasActiveBookings = await _context.Bookings
-        .AnyAsync(b => b.VenueId == venue.VenueId);
+            return View(booking);
+        }
 
-    if (hasActiveBookings)
-    {
-        // Add an error or alert here
-        TempData["ErrorMessage"] = "This venue has active bookings and cannot be deleted.";
-        return RedirectToAction(nameof(Index));
-    }
 
-    _context.Venues.Remove(venue);
-    await _context.SaveChangesAsync();
-    return RedirectToAction(nameof(Index));
-}
 
-        // POST: Booking/Delete/5
-        [HttpPost, ActionName("Delete")]
+       [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -154,6 +163,7 @@ public async Task<IActionResult> Create([Bind("BookingId, EventId, VenueId, Book
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool BookingExists(int id)
         {
