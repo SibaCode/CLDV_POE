@@ -8,43 +8,131 @@ using System.Threading.Tasks;
 
 namespace EventEase.Controllers
 {
-public class EventController : Controller
-{
-    private readonly AppDbContext _context;
-
-    public EventController(AppDbContext context)
+    public class EventController : Controller
     {
-        _context = context;
-    }
-public async Task<IActionResult> Index()
-{
-    var events = await _context.Events
-        .Include(e => e.Venue)
-        .ToListAsync();
-    return View(events);
-}
+        private readonly AppDbContext _context;
 
-    // GET: Event/Create
-    public IActionResult Create()
-    {
-        ViewBag.VenueList = new SelectList(_context.Venues, "VenueId", "VenueName");
-        return View();
-    }
-
-    // POST: Event/Create
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("EventId,EventName,EventDate,Description,VenueId")] Event @event)
-    {
-        if (ModelState.IsValid)
+        public EventController(AppDbContext context)
         {
-            _context.Add(@event);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            _context = context;
         }
 
+        // GET: Event
+        public async Task<IActionResult> Index()
+        {
+            var events = await _context.Events
+                .Include(e => e.Venue)
+                .ToListAsync();
+            return View(events);
+        }
+
+        // GET: Event/Create
+        public IActionResult Create()
+        {
+            ViewBag.VenueList = new SelectList(_context.Venues, "VenueId", "VenueName");
+            return View();
+        }
+
+        // POST: Event/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("EventId,EventName,EventDate,Description,VenueId")] Event @event)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(@event);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewBag.VenueList = new SelectList(_context.Venues, "VenueId", "VenueName", @event.VenueId);
+            return View(@event);
+        }
+
+// GET: Event/Edit/5
+  public async Task<IActionResult> Edit(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        var @event = await _context.Events.FindAsync(id);
+        if (@event == null)
+        {
+            return NotFound();
+        }
+
+        // Populating Venue dropdown list for editing
         ViewBag.VenueList = new SelectList(_context.Venues, "VenueId", "VenueName", @event.VenueId);
         return View(@event);
     }
+
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Edit(int id, [Bind("EventId,EventName,EventDate,Description,VenueId")] Event @event)
+{
+    if (id != @event.EventId)
+    {
+        return NotFound();
+    }
+
+    if (ModelState.IsValid)
+    {
+        try
+        {
+            _context.Update(@event);
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!_context.Events.Any(e => e.EventId == @event.EventId))
+            {
+                return NotFound();
+            }
+            else
+            {
+                throw;
+            }
+        }
+        return RedirectToAction(nameof(Index));
+    }
+
+    // Ensure the VenueList is set for the dropdown
+    ViewBag.VenueList = new SelectList(_context.Venues, "VenueId", "VenueName", @event.VenueId);
+    return View(@event);
 }
+
+        // GET: Event/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var @event = await _context.Events
+                .Include(e => e.Venue)
+                .FirstOrDefaultAsync(m => m.EventId == id);
+            if (@event == null) return NotFound();
+
+            return View(@event);
+        }
+
+        // POST: Event/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var @event = await _context.Events.FindAsync(id);
+            if (@event != null)
+            {
+                _context.Events.Remove(@event);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool EventExists(int id)
+        {
+            return _context.Events.Any(e => e.EventId == id);
+        }
+    }
 }
