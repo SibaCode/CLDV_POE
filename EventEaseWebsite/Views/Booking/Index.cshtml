@@ -1,14 +1,11 @@
 @model IEnumerable<EventEase.Models.Booking>
 
 @{
-    ViewData["Title"] = "Bookings";
+    ViewData["Title"] = "Bookings List";
 }
 
-<h2>Bookings</h2>
-
-<p>
-    <a href="@Url.Action("Create")" class="btn btn-primary">Create New Booking</a>
-</p>
+<h1>Bookings List</h1>
+<a asp-action="Create" class="btn btn-primary mb-3">Create New Booking</a>
 
 <table class="table">
     <thead>
@@ -20,17 +17,17 @@
         </tr>
     </thead>
     <tbody>
-    @foreach (var booking in Model)
-    {
-        <tr>
-            <td>@booking.Event.EventName</td>
-            <td>@booking.Venue.VenueName</td>
-            <td>@booking.BookingDate.ToString("MM/dd/yyyy")</td>
-            <td>
-                <a href="@Url.Action("Edit", new { id = booking.BookingId })" class="btn btn-warning">Edit</a>
-                <a href="@Url.Action("Delete", new { id = booking.BookingId })" class="btn btn-danger">Delete</a>
-            </td>
-        </tr>
-    }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Event?.EventName</td> <!-- Access Event Name -->
+                <td>@item.Venue?.VenueName</td> <!-- Access Venue Name -->
+                <td>@item.BookingDate</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.BookingId" class="btn btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.BookingId" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

@@ -4,14 +4,25 @@
     ViewData["Title"] = "Booking Details";
 }
 
-<h2>Booking Details</h2>
+<h1>Booking Details</h1>
 
 <div>
-    <strong>Event:</strong> @Model.Event.EventName
-    <br />
-    <strong>Venue:</strong> @Model.Venue.VenueName
-    <br />
-    <strong>Booking Date:</strong> @Model.BookingDate.ToString("MM/dd/yyyy")
+    <h4>Booking</h4>
+    <dl class="dl-horizontal">
+        <dt>Event</dt>
+        <dd>@Model.Event?.EventName</dd>
+        <dt>Venue</dt>
+        <dd>@Model.Venue?.VenueName</dd> <!-- Access Venue details -->
+        <dt>Booking Date</dt>
+        <dd>@Model.BookingDate</dd>
+    </dl>
 </div>
 
-<a href="@Url.Action("Index")" class="btn btn-secondary">Back to list</a>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.BookingId" class="btn btn-warning">Edit</a>
+    <a asp-action="Delete" asp-route-id="@Model.BookingId" class="btn btn-danger">Delete</a>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
