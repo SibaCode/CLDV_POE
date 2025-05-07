@@ -104,19 +104,36 @@ public async Task<IActionResult> Edit(int id, [Bind("EventId,EventName,EventDate
 }
 
 // GET: Event/Delete/5
-public async Task<IActionResult> Delete(int id)
+public async Task<IActionResult> Delete(int? id)
 {
-    var @event = await _context.Events
-        .Include(e => e.Venue)  // Optionally include Venue
-        .FirstOrDefaultAsync(m => m.EventId == id);
-
-    if (@event == null)
+    if (id == null)
     {
         return NotFound();
     }
 
-    return View(@event);
+    var eventItem = await _context.Events
+        .FirstOrDefaultAsync(m => m.EventId == id);
+
+    if (eventItem == null)
+    {
+        return NotFound();
+    }
+
+    // Check if there are any active bookings for the event
+    bool hasActiveBookings = await _context.Bookings
+        .AnyAsync(b => b.EventId == eventItem.EventId);
+
+    if (hasActiveBookings)
+    {
+        TempData["ErrorMessage"] = "This event has active bookings and cannot be deleted.";
+        return RedirectToAction(nameof(Index));
+    }
+
+    _context.Events.Remove(eventItem);
+    await _context.SaveChangesAsync();
+    return RedirectToAction(nameof(Index));
 }
+
 
 // POST: Event/Delete/5
 [HttpPost, ActionName("Delete")]

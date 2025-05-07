@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EventEaseWebsite")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1ab10b2b017750f71ff48a14a6e465da272ca893")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0e7632c4a1a10a1ceadef62f66d1f80500fc5c15")]
 [assembly: System.Reflection.AssemblyProductAttribute("EventEaseWebsite")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EventEaseWebsite")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

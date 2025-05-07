@@ -20,17 +20,24 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var venue in Model)
-        {
-            <tr>
-                <td>@venue.VenueName</td>
-                <td>@venue.Location</td>
-                <td>@venue.Capacity</td>
-                <td>
-                    <a href="@Url.Action("Edit", new { id = venue.VenueId })" class="btn btn-warning btn-sm">Edit</a>
-                    <a href="@Url.Action("Delete", new { id = venue.VenueId })" class="btn btn-danger btn-sm">Delete</a>
-                </td>
-            </tr>
-        }
+       @foreach (var venue in Model)
+{
+    <tr>
+        <td>@venue.VenueName</td>
+        <td>@venue.Location</td>
+        <td>@venue.Capacity</td>
+        <td>
+            @if (((HashSet<int>)ViewBag.BookedVenueIds).Contains(venue.VenueId))
+            {
+                <button class="btn btn-secondary" disabled>Booked</button>
+            }
+            else
+            {
+                <a asp-action="Delete" asp-route-id="@venue.VenueId" class="btn btn-danger">Delete</a>
+            }
+        </td>
+    </tr>
+}
+
     </tbody>
 </table>

@@ -18,12 +18,21 @@ namespace EventEase.Controllers
         }
 
         // GET: Venue
-        public async Task<IActionResult> Index()
-        {
-                var venues = await _context.Venues.ToListAsync();
+       public async Task<IActionResult> Index()
+{
+    var venues = await _context.Venues.ToListAsync();
 
-            return View(venues);
-        }
+    // Create a dictionary of VenueId to Booking existence
+    var bookedVenueIds = _context.Bookings
+                                 .Select(b => b.VenueId)
+                                 .Distinct()
+                                 .ToHashSet();
+
+    ViewBag.BookedVenueIds = bookedVenueIds;
+
+    return View(venues);
+}
+
 
         // GET: Venue/Create
         public IActionResult Create()
