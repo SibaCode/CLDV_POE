@@ -55,28 +55,38 @@ public async Task<IActionResult> Index(string searchString)
         public IActionResult Create()
         {
             ViewBag.VenueList = new SelectList(_context.Venues, "VenueId", "VenueName");
+            ViewBag.EventTypeList = new SelectList(_context.EventType, "EventTypeId", "Name");
             return View();
         }
 
        [HttpPost]
 [ValidateAntiForgeryToken]
+
 public async Task<IActionResult> Create(Event @event, IFormFile imageFile)
 {
-    if (ModelState.IsValid)
+    try
     {
-        if (imageFile != null && imageFile.Length > 0)
+        if (ModelState.IsValid)
         {
-            // Upload image to Azure Blob Storage and get SAS URL
-            var imageUrl = await _blobService.UploadFileAsync(imageFile, "event-images");
-            @event.ImageUrl = imageUrl;
-        }
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                var imageUrl = await _blobService.UploadFileAsync(imageFile, "event-images");
+                @event.ImageUrl = imageUrl;
+            }
 
-        _context.Add(@event);
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
+            _context.Add(@event);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+    }
+    catch (Exception ex)
+    {
+        return Content($"Error: {ex.Message}");
     }
 
     ViewBag.VenueList = new SelectList(_context.Venues, "VenueId", "VenueName", @event.VenueId);
+    ViewBag.EventTypeList = new SelectList(_context.EventType, "EventTypeId", "Name", @event.EventTypeId);
+
     return View(@event);
 }
 
@@ -97,6 +107,8 @@ public async Task<IActionResult> Create(Event @event, IFormFile imageFile)
 
         // Populating Venue dropdown list for editing
         ViewBag.VenueList = new SelectList(_context.Venues, "VenueId", "VenueName", @event.VenueId);
+        ViewBag.EventTypeList = new SelectList(_context.EventType, "EventTypeId", "Name", @event.EventTypeId);
+
         return View(@event);
     }
 
@@ -141,6 +153,8 @@ public async Task<IActionResult> Edit(int id, [Bind("EventId,EventName,EventDate
 
     // Populate the VenueList dropdown
     ViewBag.VenueList = new SelectList(_context.Venues, "VenueId", "VenueName", @event.VenueId);
+    ViewBag.EventTypeList = new SelectList(_context.EventType, "EventTypeId", "Name", @event.EventTypeId);
+
     return View(@event);
 }
 public async Task<IActionResult> Delete(int? id)

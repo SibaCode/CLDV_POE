@@ -67,6 +67,9 @@ namespace EventEaseWebsite.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("EventTypeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
@@ -75,9 +78,28 @@ namespace EventEaseWebsite.Migrations
 
                     b.HasKey("EventId");
 
+                    b.HasIndex("EventTypeId");
+
                     b.HasIndex("VenueId");
 
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("EventEase.Models.EventType", b =>
+                {
+                    b.Property<int>("EventTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EventTypeId"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("EventTypeId");
+
+                    b.ToTable("EventType");
                 });
 
             modelBuilder.Entity("EventEase.Models.Venue", b =>
@@ -128,13 +150,26 @@ namespace EventEaseWebsite.Migrations
 
             modelBuilder.Entity("EventEase.Models.Event", b =>
                 {
+                    b.HasOne("EventEase.Models.EventType", "EventType")
+                        .WithMany("Events")
+                        .HasForeignKey("EventTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("EventEase.Models.Venue", "Venue")
                         .WithMany()
                         .HasForeignKey("VenueId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.Navigation("EventType");
+
                     b.Navigation("Venue");
+                });
+
+            modelBuilder.Entity("EventEase.Models.EventType", b =>
+                {
+                    b.Navigation("Events");
                 });
 #pragma warning restore 612, 618
         }

@@ -16,27 +16,63 @@ namespace EventEase.Controllers
         {
             _context = context;
         }
-        public async Task<IActionResult> Index(string searchString)
+    public async Task<IActionResult> Index(
+    string searchString,
+    int? eventTypeId,
+    int? venueId,
+    DateTime? startDate,
+    DateTime? endDate)
 {
+    // Start query
     var bookingsQuery = _context.Bookings
-        .Include(b => b.Event)
+        .Include(b => b.Event).ThenInclude(e => e.EventType)
         .Include(b => b.Venue)
         .AsQueryable();
 
+    // Apply filters
     if (!string.IsNullOrEmpty(searchString))
     {
         bookingsQuery = bookingsQuery.Where(b =>
             b.Event.EventName.Contains(searchString) ||
             b.Venue.VenueName.Contains(searchString) ||
-            b.BookingDate.ToString().Contains(searchString)
-        );
+            b.BookingDate.ToString().Contains(searchString));
     }
 
-    var bookings = await bookingsQuery.OrderByDescending(b => b.BookingDate).ToListAsync();
+    if (eventTypeId.HasValue)
+    {
+        bookingsQuery = bookingsQuery.Where(b => b.Event.EventTypeId == eventTypeId);
+    }
+
+    if (venueId.HasValue)
+    {
+        bookingsQuery = bookingsQuery.Where(b => b.VenueId == venueId);
+    }
+
+    if (startDate.HasValue)
+    {
+        bookingsQuery = bookingsQuery.Where(b => b.BookingDate >= startDate.Value);
+    }
+
+    if (endDate.HasValue)
+    {
+        bookingsQuery = bookingsQuery.Where(b => b.BookingDate <= endDate.Value);
+    }
+
+    // Populate ViewBags for form controls
+    ViewBag.EventTypes = new SelectList(await _context.EventType.ToListAsync(), "EventTypeId", "Name", eventTypeId);
+    ViewBag.Venues = new SelectList(await _context.Venues.ToListAsync(), "VenueId", "VenueName", venueId);
+    
     ViewBag.CurrentFilter = searchString;
+    ViewBag.StartDate = startDate?.ToString("yyyy-MM-dd");
+    ViewBag.EndDate = endDate?.ToString("yyyy-MM-dd");
+
+    var bookings = await bookingsQuery
+        .OrderByDescending(b => b.BookingDate)
+        .ToListAsync();
 
     return View(bookings);
 }
+
 
 
         public IActionResult Create()
